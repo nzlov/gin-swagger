@@ -2,10 +2,11 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/swaggo/gin-swagger"
-	"github.com/swaggo/gin-swagger/swaggerFiles"
+	"github.com/nzlov/gin-swagger"
+	"github.com/nzlov/gin-swagger/swaggerFiles"
 
-	_ "github.com/swaggo/gin-swagger/example/docs"
+	"github.com/nzlov/gin-swagger/example/api"
+	_ "github.com/nzlov/gin-swagger/example/docs"
 )
 
 // @title Swagger Example API
@@ -17,15 +18,22 @@ import (
 // @contact.url http://www.swagger.io/support
 // @contact.email support@swagger.io
 
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name X-Appkey
+
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host petstore.swagger.io
-// @BasePath /v2
+// @host 192.168.1.200:6060
+// @BasePath /
 func main() {
 	r := gin.New()
+	r.Use(gin.Logger())
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	r.Run()
+	r.GET("/testapi/get-string-by-int/:some_id", api.GetStringByInt)
+
+	r.Run(":6060")
 }
